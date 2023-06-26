@@ -10,7 +10,6 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddCardPopup from './AddCardPopup';
-import SuccessPopup from './SuccessPopup';
 import Profile from './Profile';
 import DeleteCardPopup from './DeleteCardPopup';
 import successLogo from '../images/success.svg';
@@ -23,7 +22,6 @@ import { auth } from '../utils/Auth';
 
 function App() {
     const [loggedIn, setLogin] = React.useState(false);
-
     const [isOpenEditProfilePopup, setEditProfilePopup] = React.useState(false);
     const [isOpenEditAvatarPopup, setEditAvatarPopup] = React.useState(false);
     const [isOpenAddCardPopup, setAddCardPopup] = React.useState(false);
@@ -34,8 +32,6 @@ function App() {
     const [cardToBeDeleted, setToBeDeletedCard] = React.useState('');
     const [cards, setCards] = React.useState([]);
     const [currentUser, setCurrentUser] = React.useState({});
-    const [isActiveSuccessPopup, setSuccessPopup] = React.useState(false);
-    const [successMessage, setSuccessMessage] = React.useState('');
     const [isLoading, setLoading] = React.useState(false);
     const isSomePopupOpened = React.useMemo(
         () =>
@@ -63,100 +59,11 @@ function App() {
         };
     }, [isSomePopupOpened, handleKeyEscape]);
 
-    function startSuccessPopup(text) {
-        setSuccessMessage(text);
-        setSuccessPopup(true);
-        setTimeout(() => {
-            setSuccessMessage('');
-            setSuccessPopup(false);
-        }, 2000);
-    }
-
-    function startErrorPopup() {
-        startSuccessPopup('Что то пошло не так :(');
-    }
-    async function handleCardLike(card) {
-        const isLiked = card.likes.some((user) => user._id === currentUser._id);
-        try {
-            const response = await Api.changeLikeCardStatus(card._id, isLiked);
-            const newCard = await response;
-            setCards((prev) => prev.map((prevCard) => (prevCard._id === card._id ? newCard : prevCard)));
-        } catch (error) {
-            startErrorPopup();
-            console.error(error);
+    useEffect(() => {
+        if (loggedIn) {
+            startRender();
         }
-    }
-    async function handleUpdateUser(user) {
-        setLoading(true);
-        try {
-            const response = await Api.setProfileInfo(user);
-            const newUserInfo = await response;
-            setCurrentUser(newUserInfo);
-            startSuccessPopup('Данные пользователя успешно обновлены');
-            closeAllPopups();
-        } catch (error) {
-            startErrorPopup();
-            console.error(error);
-        }
-        setLoading(false);
-    }
-
-    async function handleUpdateAvatar(info) {
-        setLoading(true);
-        try {
-            const response = await Api.setProfileAvatar(info);
-            const newUserInfo = await response;
-            setCurrentUser(newUserInfo);
-            startSuccessPopup('Данные пользователя успешно обновлены');
-            closeAllPopups();
-        } catch (error) {
-            startErrorPopup();
-            console.error(error);
-        }
-        setLoading(false);
-    }
-
-    async function handleAddCard(card) {
-        setLoading(true);
-        try {
-            const response = await Api.addNewCard(card);
-            const newCard = await response;
-            setCards((prev) => [newCard, ...prev]);
-            startSuccessPopup('Карточка успешно добавлена');
-            closeAllPopups();
-        } catch (error) {
-            startErrorPopup();
-            console.error(error);
-        }
-        setLoading(false);
-    }
-
-    async function handleDeleteCard(id) {
-        setLoading(true);
-        try {
-            await Api.deleteCard(id);
-            setCards((prevCards) => prevCards.filter((card) => card._id !== id));
-            startSuccessPopup('Карточка успешно удалена');
-            closeAllPopups();
-        } catch (error) {
-            startErrorPopup();
-            console.error(error);
-        }
-        setLoading(false);
-    }
-
-    async function handleRegistartion(info) {
-        try {
-            const response = await auth.registration(info);
-            const data = await response;
-            navigate('/sign-in', { replace: true });
-            setToolTip({ name: 'Вы успешно зарегистрировались!', link: successLogo });
-            return data;
-        } catch (error) {
-            console.error(error);
-            setToolTip({ name: 'Что-то пошло не так! Попробуйте ещё раз.', link: errorLogo });
-        }
-    }
+    }, [loggedIn]);
 
     function handleLogout() {
         setLogin(false);
@@ -169,12 +76,6 @@ function App() {
         setCurrentUser((prev) => ({ ...prev, ...newInfo }));
         setCards(newCards);
     }
-
-    useEffect(() => {
-        if (loggedIn) {
-            startRender();
-        }
-    }, [loggedIn]);
 
     const validationUser = React.useCallback(
         async (token) => {
@@ -192,19 +93,88 @@ function App() {
     );
 
     useEffect(() => {
-        localStorage.token && validationUser(localStorage.token)
+        localStorage.token && validationUser(localStorage.token);
     }, [validationUser]);
-    async function handleAuthorization(info) {
+
+    async function handleSubmit(request, successMessage) {
+        setLoading(true);
         try {
-            const responce = await auth.authorization(info);
-            const data = await responce;
-            validationUser(data.token);
-            localStorage.setItem('token', data.token);
+            await request();
+            closeAllPopups();
+            successMessage && setToolTip({ name: successMessage, link: successLogo });
         } catch (error) {
             console.error(error);
+            setToolTip({ name: 'Что-то пошло не так! Попробуйте ещё раз.', link: errorLogo });
         }
+        setLoading(false);
     }
 
+    function handleCardLike(card) {
+        const isLiked = card.likes.some((user) => user._id === currentUser._id);
+        function makeRequest() {
+            return Api.changeLikeCardStatus(card._id, isLiked).then((newCard) =>
+                setCards((prev) => prev.map((prevCard) => (prevCard._id === card._id ? newCard : prevCard)))
+            );
+        }
+
+        handleSubmit(makeRequest);
+    }
+
+    function handleUpdateAvatar(info) {
+        function makeRequest() {
+            return Api.setProfileAvatar(info).then((newUserInfo) => {
+                setCurrentUser((prev) => ({ ...prev, ...newUserInfo }));
+            });
+        }
+        handleSubmit(makeRequest, 'Аватарка успешно обновлена.');
+    }
+
+    function handleAddCard(card) {
+        function makeRequest() {
+            return Api.addNewCard(card).then((newCard) => {
+                setCards((prev) => [newCard, ...prev]);
+            });
+        }
+        handleSubmit(makeRequest, 'Карточка успешно добавлена.');
+    }
+
+    function handleUpdateUser(info) {
+        function makeRequest() {
+            return Api.setProfileInfo(info).then((newUserInfo) =>
+                setCurrentUser((prev) => ({ ...prev, newUserInfo }))
+            );
+        }
+        handleSubmit(makeRequest, 'Данный пользователя успешно обновлены.');
+    }
+
+    function handleDeleteCard(id) {
+        function makeRequest() {
+            return Api.deleteCard(id).then(() => {
+                closeAllPopups();
+                setCards((prevCards) => prevCards.filter((card) => card._id !== id));
+            });
+        }
+        handleSubmit(makeRequest, 'Карточка успешно удалена.');
+    }
+
+    function handleRegistartion(info) {
+        function makeRequest() {
+            return auth.registration(info).then(() => {
+                navigate('/sign-in', { replace: true });
+            });
+        }
+        handleSubmit(makeRequest, 'Вы успешно зарегистрировались!');
+    }
+
+    function handleAuthorization(info) {
+        function makeRequest() {
+            return auth.authorization(info).then(({ token }) => {
+                validationUser(token);
+                localStorage.setItem('token', token);
+            });
+        }
+        handleSubmit(makeRequest);
+    }
     function closeAllPopups(e) {
         setEditProfilePopup(false);
         setEditAvatarPopup(false);
@@ -242,7 +212,7 @@ function App() {
 
             <Routes>
                 <Route
-                    path='/'
+                    path='/*'
                     element={
                         <ProtectedRouteElement
                             loggedIn={loggedIn}
@@ -313,10 +283,6 @@ function App() {
             <ImagePopup
                 card={selectedCard}
                 onClose={closeAllPopups}
-            />
-            <SuccessPopup
-                textSuccess={successMessage}
-                isActive={isActiveSuccessPopup}
             />
             {loggedIn && <Footer />}
         </CurrentUserContext.Provider>

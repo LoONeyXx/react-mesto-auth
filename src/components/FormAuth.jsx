@@ -16,7 +16,7 @@ function FormAuth({ name, submitText, onSubmit }) {
         >
             <fieldset className={`form__input-group form__input-group_type_${name}`}>
                 <input
-                    defaultValue={values.email}
+                    value={values.email}
                     onChange={handleChangeInput}
                     noValidate
                     minLength={2}
@@ -26,7 +26,7 @@ function FormAuth({ name, submitText, onSubmit }) {
                     type='email'
                 />
                 <input
-                    defaultValue={values.password}
+                    value={values.password}
                     onChange={handleChangeInput}
                     noValidate
                     placeholder='Пароль'

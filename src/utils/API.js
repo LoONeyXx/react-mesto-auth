@@ -80,9 +80,7 @@ class API {
     }
 
     _getResult(result) {
-        return result.ok
-            ? result.json()
-            : Promise.reject(new Error(`Что то пошло не так`));
+        return result.ok ? result.json() : Promise.reject(new Error(`Что то пошло не так`));
     }
 }
 
