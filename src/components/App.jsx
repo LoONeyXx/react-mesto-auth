@@ -158,7 +158,7 @@ function App() {
         }
     }
 
-    function handleExit() {
+    function handleLogout() {
         setLogin(false);
         localStorage.removeItem('token');
         setCurrentUser({});
@@ -192,7 +192,7 @@ function App() {
     );
 
     useEffect(() => {
-        localStorage.token && validationUser(localStorage.token);
+        localStorage.token && validationUser(localStorage.token)
     }, [validationUser]);
     async function handleAuthorization(info) {
         try {
@@ -236,7 +236,7 @@ function App() {
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <Header
-                onExit={handleExit}
+                onExit={handleLogout}
                 location={location}
             />
 

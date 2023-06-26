@@ -1,6 +1,4 @@
-.header__burger-menu_active {
-    visibility: hidden;
-}
+
 
 @media screen and (max-width: 767px) {
     .header__burger-menu_active {
