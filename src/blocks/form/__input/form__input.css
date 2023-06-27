@@ -7,17 +7,6 @@
     line-height: 16.94px;
 }
 
-/* input:-internal-autofill-selected {
-    border: none;
-    outline: none;
-    margin: 0;
-    padding: 7px 0;
-}
-
-input:auto-fill {
-    background-color: blue;
-} */
-
 .form__input:-webkit-autofill,
 .form__input:-webkit-autofill:hover,
 .form__input:-webkit-autofill:focus {

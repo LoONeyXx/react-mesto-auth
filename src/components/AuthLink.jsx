@@ -5,11 +5,11 @@ export function AuthLink({ onExit }) {
     const location = useLocation();
     React.useEffect(() => {
         if (location.pathname === '/sign-up') {
-            setLink({ path: 'sign-up', text: 'Войти' });
+            setLink({ path: 'sign-in', text: 'Войти' });
             return;
         }
         if (location.pathname === '/sign-in') {
-            setLink({ path: 'sign-in', text: 'Регистрация' });
+            setLink({ path: 'sign-up', text: 'Регистрация' });
             return;
         }
 

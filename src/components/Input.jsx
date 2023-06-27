@@ -12,15 +12,11 @@ function Input({
     required = false,
     nameInput,
 }) {
-    function handleChange(e) {
-        console.log(e.target.value);
-        handleChangeInput(e);
-    }
     return (
         <>
             <input
                 value={value}
-                onChange={handleChange}
+                onChange={handleChangeInput}
                 noValidate
                 placeholder={placeholder}
                 name={nameInput}

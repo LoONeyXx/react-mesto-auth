@@ -2,14 +2,7 @@ import React from 'react';
 import Popup from './Popup';
 import Form from './Form';
 
-const PopupWithForm = React.memo(function PopupWithForm({
-    title,
-    name,
-    children,
-    isOpen,
-    onClose,
-    onSubmit,
-}) {
+const PopupWithForm = React.memo(function PopupWithForm({ title, name, children, isOpen, onClose, onSubmit }) {
     return (
         <Popup
             name='form'

@@ -1,6 +1,4 @@
-
-
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 980px) {
     .header__burger-menu_active {
         padding: 40px 0;
         visibility: visible;

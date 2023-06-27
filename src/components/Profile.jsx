@@ -4,7 +4,10 @@ const Profile = React.memo(function Profile({ onEditAvatar, onEditProfile, onAdd
     const currentUser = React.useContext(CurrentUserContext);
     return (
         <section className='profile'>
-            <div onClick={onEditAvatar} className='profile__overlay no-highlight'>
+            <div
+                onClick={onEditAvatar}
+                className='profile__overlay no-highlight'
+            >
                 <div
                     style={{
                         backgroundImage: `url(${currentUser.avatar})`,
@@ -21,7 +24,11 @@ const Profile = React.memo(function Profile({ onEditAvatar, onEditProfile, onAdd
                 />
                 <p className='profile__subtitle'>{currentUser.about}</p>
             </div>
-            <button onClick={onAddPlace} type='button' className='button profile__btn-add opacity no-highlight' />
+            <button
+                onClick={onAddPlace}
+                type='button'
+                className='button profile__btn-add opacity no-highlight'
+            />
         </section>
     );
 });

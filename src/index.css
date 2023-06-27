@@ -13,11 +13,9 @@
 @import url(./blocks/form/form.css);
 @import url(./blocks/form/_type/form_type_popup.css);
 @import url(./blocks/form/__input-group/form__input-group.css);
-@import url(./blocks/form/__input-group/_type/form__input-group_type_popup.css);
 @import url(./blocks/form/__input-group/_type/form__input-group_type_authotization.css);
 @import url(./blocks/form/__input/form__input.css);
 @import url(./blocks/form/__input/_type/input_type_popup.css);
-@import url(./blocks/form/__input/_type/input_type_authorization.css);
 @import url(./blocks/form/__input-error/form__input-error.css);
 @import url(./blocks/form/__input-error/_visible/form__input-error_visible.css);
 @import url(./blocks/form/__submit/form__submit.css);

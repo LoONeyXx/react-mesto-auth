@@ -19,7 +19,10 @@ const Card = React.memo(function Card({ card, onCardClick, onCardLike, onCardDel
     return (
         <li className='cards__item scale-animation'>
             {isOwn && (
-                <button onClick={handleClickDelete} className='button cards__delete-btn opacity no-highlight' />
+                <button
+                    onClick={handleClickDelete}
+                    className='button cards__delete-btn opacity no-highlight'
+                />
             )}
             <div
                 onClick={handleClick}
@@ -31,7 +34,11 @@ const Card = React.memo(function Card({ card, onCardClick, onCardLike, onCardDel
             <div className='cards__title-zone'>
                 <h2 className='cards__title'>{card.name}</h2>
                 <div className='cards__like-zone'>
-                    <button onClick={handleLikeClick} type='button' className={cardLikeButtonClassName} />
+                    <button
+                        onClick={handleLikeClick}
+                        type='button'
+                        className={cardLikeButtonClassName}
+                    />
                     <p className='cards__like-counter'>{card.likes.length}</p>
                 </div>
             </div>
