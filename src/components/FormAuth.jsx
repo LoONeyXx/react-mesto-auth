@@ -1,4 +1,4 @@
-import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 import Form from './Form';
 import Input from './Input';
 import SubmitButton from './SubmitButton';

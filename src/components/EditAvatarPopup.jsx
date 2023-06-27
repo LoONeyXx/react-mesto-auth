@@ -1,6 +1,6 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
-import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 import Input from './Input';
 import SubmitButton from './SubmitButton';
 const EditAvatarPopup = React.memo(function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {

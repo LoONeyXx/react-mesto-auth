@@ -12,7 +12,7 @@ class Auth {
                 password: password,
                 email: email,
             }),
-        })
+        });
     }
 
     registration({ password, email }) {
@@ -41,4 +41,5 @@ class Auth {
     }
 }
 
-export const auth = new Auth();
+const auth = new Auth();
+export default auth;

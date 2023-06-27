@@ -1,6 +1,6 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
-import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 import Input from './Input';
 import SubmitButton from './SubmitButton';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import CurrentUserContext from '../contexts/CurrentUserContext';
-import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 import Input from './Input';
 import SubmitButton from './SubmitButton';
 const EditProfilePopup = React.memo(function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
@@ -14,7 +14,7 @@ const EditProfilePopup = React.memo(function EditProfilePopup({ isOpen, onClose,
     function handleSubmit(e) {
         onUpdateUser(values);
     }
-    
+
     React.useEffect(() => {
         if (!isOpen && currentUser.name) {
             resetForm(currentUser, {}, true);

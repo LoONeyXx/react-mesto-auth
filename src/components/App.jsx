@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Footer from './Footer';
@@ -18,8 +18,8 @@ import Register from './Register';
 import Login from './Login';
 import InfoTooltip from './InfoTooltip';
 import ProtectedRouteElement from './ProtectedRoute';
-import { auth } from '../utils/Auth';
-import { useOpenAndClosePopup } from '../hooks/useOpenAndClosePopups';
+import auth from '../utils/Auth';
+import useOpenAndClosePopup from '../hooks/useOpenAndClosePopups';
 
 function App() {
     const popups = React.useMemo(
@@ -33,6 +33,7 @@ function App() {
         }),
         []
     );
+
     const [loggedIn, setLogin] = React.useState(false);
     const [selectedCard, setSelectCard] = React.useState({
         name: '',
@@ -45,7 +46,6 @@ function App() {
     const [isLoading, setLoading] = React.useState(false);
     const [toolTip, setToolTip] = React.useState({});
     const navigate = useNavigate();
-    const location = useLocation();
 
     function handleLogout() {
         setLogin(false);
@@ -62,6 +62,16 @@ function App() {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        function consl() {
+            console.log('storage changed');
+        }
+        window.addEventListener('storage', consl);
+        return () => {
+            window.removeEventListener('storage', consl);
+        };
+    }, [loggedIn]);
     useEffect(() => {
         if (loggedIn) {
             startRender();
@@ -74,8 +84,8 @@ function App() {
                 const responce = await auth.validation(token);
                 const email = responce.data.email;
                 setCurrentUser((prev) => ({ ...prev, email: email }));
-                navigate('/', { replace: true });
                 setLogin(true);
+                navigate('/', { replace: true });
             } catch (error) {
                 console.error(error);
             }
@@ -165,7 +175,7 @@ function App() {
                 localStorage.setItem('token', token);
             });
         }
-        handleSubmit(makeRequest);
+        handleSubmit(makeRequest, 'Вы успешно авторизоризовались');
     }
 
     function handleEditAvatarClick() {
@@ -191,10 +201,7 @@ function App() {
 
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <Header
-                onExit={handleLogout}
-                location={location}
-            />
+            <Header onExit={handleLogout} />
 
             <Routes>
                 <Route
@@ -220,17 +227,18 @@ function App() {
                         />
                     }
                 ></Route>
-                {!localStorage.token && (
-                    <>
-                        <Route
-                            path='/sign-up'
-                            element={<Register onSubmit={handleRegistartion} />}
-                        />
-                        <Route
-                            path='/sign-in'
-                            element={<Login onSubmit={handleAuthorization} />}
-                        />
-                    </>
+
+                {!loggedIn && (
+                    <Route
+                        path='sign-up'
+                        element={<Register onSubmit={handleRegistartion} />}
+                    />
+                )}
+                {!loggedIn && (
+                    <Route
+                        path='sign-in'
+                        element={<Login onSubmit={handleAuthorization} />}
+                    />
                 )}
             </Routes>
 

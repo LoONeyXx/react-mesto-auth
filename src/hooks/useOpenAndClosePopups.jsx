@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function useOpenAndClosePopup(popups) {
+export default function useOpenAndClosePopup(popups) {
     const [isOpenPopups, setIsOpen] = React.useState(popups);
 
     function openPopup(popup) {
