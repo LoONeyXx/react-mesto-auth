@@ -1,20 +1,14 @@
 .form__submit {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
     background: rgb(255, 255, 255);
     text-align: center;
-    padding: 14px 0;
-    margin-top: 216px;
-    transition: all 0.2s ease;
-    text-align: center;
-
+    font-size: 18px;
+    line-height: 21.78px;
 }
 
-.form__submit:hover {
-    background: rgb(255, 255, 255, 0.85);
-}
-
-@media screen and (max-width: 767px) {
-    .form__submit {
-        margin-top: 173px;
+@media screen and (max-width: 980px) {
+    .form__submit_type_popup {
+        font-size: 14px;
+        line-height: 17px;
     }
 }

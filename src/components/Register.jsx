@@ -1,15 +1,14 @@
-import React from 'react';
 import FormAuth from './FormAuth';
 import { Link } from 'react-router-dom';
-function Register({ onSubmit }) {
-
+function Register({ onSubmit, isLoading }) {
     return (
         <section className='register'>
             <h2 className='register__title'>Регистрация</h2>
             <FormAuth
                 name='authorization'
-                submitText='Зарегистрироваться'
                 onSubmit={onSubmit}
+                submitText='Регистрация'
+                isLoading={isLoading}
             />
             <p className='register__footer-info'>
                 Уже зарегистрированы?{' '}

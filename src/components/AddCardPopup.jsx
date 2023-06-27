@@ -1,85 +1,63 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
-import { useForm } from '../hooks/useForm';
-const AddCardPopup = React.memo(function AddCardPopup({ isOpen, onClose, onAddCard, refPopup, isLoading }) {
-    const {
-        values,
-        isValid,
-        errorMessages,
-        handleChangeForm,
-        handleChangeInput,
-        setErrorMessages,
-        setValues,
-        setValid,
-    } = useForm({
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import Input from './Input';
+import SubmitButton from './SubmitButton';
+
+const AddCardPopup = React.memo(function AddCardPopup({ isOpen, onClose, onAddCard, isLoading }) {
+    const { values, handleChangeInput, errorMessages, isValid, resetForm } = useFormAndValidation({
         name: '',
         link: '',
     });
-    React.useEffect(() => {
-        if (isOpen) {
-            setValues({ name: '', link: '' });
-            setValid(false);
-            setErrorMessages({});
-        }
-    }, [isOpen, setErrorMessages, setValid, setValues]);
-
     function handleSubmit(e) {
-        e.preventDefault();
         onAddCard(values);
     }
+    React.useEffect(() => {
+        if (!isOpen) {
+            resetForm({
+                name: '',
+                link: '',
+            });
+        }
+    }, [isOpen, resetForm]);
 
     return (
         <PopupWithForm
-            name='add-card'
-            title='Новое место'
-            submitText='Создать'
+            name='addCard'
             isOpen={isOpen}
             onClose={onClose}
             onSubmit={handleSubmit}
-            isValid={isValid}
-            isLoading={isLoading}
-            loadingMessage={'Сохранение...'}
-            refPopup={refPopup}
-            onChange={handleChangeForm}
+            title='Новое место'
         >
-            <fieldset className='popup__input-group'>
-                <input
-                    value={values.name}
-                    onChange={handleChangeInput}
-                    minLength='2'
-                    maxLength='30'
-                    required
-                    placeholder='Название'
-                    className='popup__input popup__input_type_card-title no-highlight'
-                    type='text'
-                    name='name'
-                    id='title'
-                />
-                <span
-                    className={`popup__input-error avatar-error ${
-                        errorMessages.name && 'popup__input-error_visible'
-                    }`}
-                >
-                    {errorMessages.name}
-                </span>
-                <input
-                    value={values.link}
-                    onChange={handleChangeInput}
-                    required
-                    placeholder='Ссылка на картинку'
-                    className='popup__input popup__input_type_card-link no-highlight'
-                    type='url'
-                    name='link'
-                    id='link'
-                />
-                <span
-                    className={`popup__input-error avatar-error ${
-                        errorMessages.link && 'popup__input-error_visible'
-                    }`}
-                >
-                    {errorMessages.link}
-                </span>
-            </fieldset>
+            <Input
+                value={values.name}
+                errorMessage={errorMessages.name}
+                handleChangeInput={handleChangeInput}
+                nameClass='popup'
+                nameInput='name'
+                type='text'
+                placeholder='Название'
+                minLength='2'
+                maxLength='30'
+                required={true}
+            />
+            <Input
+                value={values.link}
+                errorMessage={errorMessages.link}
+                handleChangeInput={handleChangeInput}
+                nameClass='popup'
+                nameInput='link'
+                type='url'
+                placeholder='Ссылка на картинку'
+                required={true}
+            />
+            <SubmitButton
+                name='popup'
+                isLoading={isLoading}
+                isValid={isValid}
+                loadingMessage={'Создается..'}
+                submitText='Создать'
+            ></SubmitButton>
         </PopupWithForm>
     );
 });

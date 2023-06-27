@@ -1,47 +1,44 @@
-import React from 'react';
-import { useInput } from '../hooks/useInput';
-function FormAuth({ name, submitText, onSubmit }) {
-    const { values, handleChangeInput } = useInput({ email: '', password: '' });
-
-    function handleSubmit(e) {
-        e.preventDefault();
+import { useFormAndValidation } from '../hooks/useFormAndValidation';
+import Form from './Form';
+import Input from './Input';
+import SubmitButton from './SubmitButton';
+function FormAuth({ submitText, onSubmit, isLoading }) {
+    const { values, handleChangeInput } = useFormAndValidation({
+        email: '',
+        password: '',
+    });
+    function handleSubmit() {
         onSubmit(values);
     }
     return (
-        <form
-            noValidate
-            action='#'
-            className={`form form_type_${name}`}
+        <Form
+            name='authorization'
             onSubmit={handleSubmit}
         >
-            <fieldset className={`form__input-group form__input-group_type_${name}`}>
-                <input
-                    value={values.email}
-                    onChange={handleChangeInput}
-                    noValidate
-                    minLength={2}
-                    placeholder='Email'
-                    name='email'
-                    className={`form__input form__input_type_${name}`}
-                    type='email'
-                />
-                <input
-                    value={values.password}
-                    onChange={handleChangeInput}
-                    noValidate
-                    placeholder='Пароль'
-                    name='password'
-                    className={`form__input form__input_type_${name}`}
-                    type='password'
-                />
-            </fieldset>
-            <button
-                type='submit'
-                className={`button form__submit`}
-            >
-                {submitText}
-            </button>
-        </form>
+            <Input
+                value={values.email}
+                handleChangeInput={handleChangeInput}
+                nameClass='authorization'
+                nameInput='email'
+                placeholder='Email'
+                type='email'
+            />
+            <Input
+                value={values.password}
+                handleChangeInput={handleChangeInput}
+                nameClass='authorization'
+                nameInput='password'
+                placeholder='Пароль'
+                type='password'
+            />
+            <SubmitButton
+                loadingMessage={'Проверка...'}
+                submitText={submitText}
+                name='authorization'
+                isValid={true}
+                isLoading={isLoading}
+            />
+        </Form>
     );
 }
 export default FormAuth;

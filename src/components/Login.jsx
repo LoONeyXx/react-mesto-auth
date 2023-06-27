@@ -1,14 +1,15 @@
 import React from 'react';
-import Form from './FormAuth';
+import FormAuth from './FormAuth';
 
-function Login({ onSubmit }) {
+function Login({ onSubmit, isLoading }) {
     return (
         <section className='login'>
             <h2 className='login__title'>Войти</h2>
-            <Form
-                name='login'
-                submitText='Войти'
+            <FormAuth
+                name='authorization'
                 onSubmit={onSubmit}
+                submitText='Войти'
+                isLoading={isLoading}
             />
         </section>
     );
