@@ -34,7 +34,7 @@ function App() {
         []
     );
 
-    const [loggedIn, setLogin] = React.useState(false);
+    const [loggedIn, setLogin] = React.useState(true);
     const [selectedCard, setSelectCard] = React.useState({
         name: '',
         link: '',
@@ -94,7 +94,7 @@ function App() {
     );
 
     useEffect(() => {
-        localStorage.token && validationUser(localStorage.token);
+        localStorage.token ? validationUser(localStorage.token) : setLogin(false);
     }, [validationUser]);
 
     async function handleSubmit(request, successMessage) {
